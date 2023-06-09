@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Distri</title>
+      <title>Distri - Invoice</title>
       
       <!-- Favicon -->
       <link rel="shortcut icon" href="assets/images/favicon.ico" />
@@ -28,7 +28,23 @@
                 <div class="container-fluid">
                     <!-- row starts -->
                    <div id="row" class="row">
-
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="table-responsive rounded mb-3">
+                        <table class="data-table table mb-0 tbl-server-info">
+                            <thead class="bg-white text-uppercase">
+                                <tr class="ligth ligth-data">
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="ligth-body" id="catRow">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
                     </div>
                     <!-- row ends -->
                </div>
@@ -85,13 +101,11 @@
     });
     $(document).ready(function(){
   $("#sidehtml").load('sidebar.html',function(){
-    initialiseNew();
-    initialiseNewOrder(getSalesData);
+    let params = new URLSearchParams(location.search);
+    const order_uuid = params.get('uuid');
+    loadorderinvoice(order_uuid)
 if(checkInternet())
 {
-        //calls
-        initiateKeys();
-         initiateData();
     document.querySelector('.internet').style.display ="none";
 }
   });

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="invoice/style.css">
+        <title>Invoice</title>
+    </head>
+    <body>
+        <div class="ticket">
+            <p class="centered"><div id="owner"></div>
+                <br><div id="address"></div></p>
+                <div style="border: 1px solid black;padding:2px">
+                    <span>Customer: <span id="customer" style="font-weight: bold;"></span></span><br>
+                    <span>OrderID: <span id="orderid" style="font-weight: bold;"></span></span><br>
+                    <span>Date: <span id="date" style="font-weight: bold;"></span></span>
+                </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="description">Product</th>
+                        <th class="quantity">Q.</th>
+                        <th class="price">Prc</th>
+                        <th class="price">Amt</th>
+                    </tr>
+                </thead>
+                <tbody id="row">
+                   
+                </tbody>
+            </table>
+            <p class="centered">Thanks for your purchase!</p>
+        </div>
+        <button id="btnPrint" class="hidden-print">Print</button>
+        <a href="view-order.html" class="hidden-print">Back to Orders</a>
+        <script src="invoice/script.js"></script>
+        <script src="assets/js/backend-bundle.min.js"></script>
+        <script src="assets/js/initialise.js"></script>
+        <script src="assets/js/master.js"></script>
+        <script>
+              $(document).ready(function(){
+    let params = new URLSearchParams(location.search);
+    const order_uuid = params.get('uuid');
+    loadorderinvoice(order_uuid)
+  });
+        </script>
+    </body>
+</html>

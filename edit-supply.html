@@ -32,60 +32,58 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <div class="header-title">
-                <h4 class="card-title">Add Supply</h4>
+                <h4 class="card-title">Edit Supply</h4>
             </div>
         </div>
         <div class="card-body">
-            <form method="POST" action="api/IV_supply/addnew" id="supply_form">
+            <form method="POST" action="api/IV_supply/edit" id="edit_supply_form">
                 <div class="row">                                
                     <div class="col-12 col-sm-12 col-md-12">                      
                         <div class="form-group">
                             <label>Description *</label>
-                            <input type="text" name="description" class="form-control datainput" placeholder="Enter Description" required>
+                            <input type="text" name="description" class="edit_description form-control datainput" placeholder="Enter Description" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>                                 
                     <div class="col-12 col-sm-12 col-md-12">
                         <div class="form-group">
                             <label for="created_at">Date *</label>
-                            <input type="datetime-local" name="created_at" id="created_at" class="datainput form-control" data-style="py-0" required>
+                            <input type="datetime-local" name="created_at" id="created_at" class="edit_sdate datainput form-control" data-style="py-0" required>
                         </div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12">
                         <div class="form-group">
                             <label for="parent">Amount *</label>
-                            <input type="number" min="0" step="0.1" name="amount" id="amount" class="datainput form-control" data-style="py-0" required>
+                            <input type="number" min="0" step="0.1" name="amount" id="amount" class=" edit_samount datainput form-control" data-style="py-0" required>
                         </div>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12">
-                        <h5>Select Products</h5>
+                        <h5>Supplied Products</h5>
                         <hr>
                         <table>
-                            <thead><th>Product</th><th>Price</th><th>Quantity</th><th>Total</th></thead>
+                            <thead><th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th></thead>
                         <tbody id="products">
 
                         </tbody>
                     </table>
-                        <div align="left">
-                            <button type="button" name="add" title="Click to add a row" id="add" class="btn btn-success btn-md">+</button>
-                          </div>
-                          <br />
+                    <div align="left">
+                      <button type="button" name="add" title="Click to add a row" id="add" class="btn btn-success btn-md">+</button>
+                    </div>
+                    <br />
                     </div>                                
                 </div>                            
-                <button type="submit" class="submit1 btn btn-primary mr-2">Submit</button>
-                <button type="reset" class="reset btn btn-danger">Reset</button>
+                <button type="submit" class="submit1 btn btn-primary mr-2">Update</button>
             </form>
         </div>
     </div>
 </div>
-<datalist id="products_name">
-    
-  </datalist>
 </div>
 <!-- row ends -->
 </div>
 </div>
-
+<datalist id="products_name">
+    
+</datalist>
 </div>
 <!-- Wrapper End-->
 <footer class="iq-footer">
@@ -125,13 +123,20 @@
 <script src="assets/js/initialise.js"></script>
 <script src="assets/js/master.js"></script>
 <script>
-    let all_p =JSON.parse(localStorage.getItem("products"));
+   let all_p =JSON.parse(localStorage.getItem("products"));
     function update_id(id)
     {
         const row = $('#row_'+id);
         const p_name = $('#product_name_'+id).val();
         const p_ = all_p.find((product)=>product.product_name ==p_name);
-        $('#product_id_'+id).val(p_.product_id);
+        if(p_)
+        {
+          $('#product_id_'+id).val(p_.product_id);
+        }
+        else
+        {
+          alert('Product not found')
+        }
     }
          function update_rate(elm) {
         try{
@@ -142,10 +147,70 @@
         }
         catch{}
   }
-    loadproducts();
-    $(document).ready(function() {
-      //adding function
-      var count = 0;
+  loadproducts();
+     let params = new URLSearchParams(location.search);
+    const s_id = params.get('supply_id');
+    loadsupplyedit(s_id);
+    $('#edit_supply_form').submit(function(event) {
+      event.preventDefault();
+      if(!checkInternet())
+        {
+            alert("This operation requires internet connection");
+            return;
+        }
+      var $form = $(this);
+      var value_array = [];
+      var num = 0;
+      //fetch products
+      $("#products tr").each(function() {
+        var curent_row = $(this);
+        var id = curent_row.attr('id');
+        if (id != undefined) {
+          id = Number.parseInt(id.split('_')[1]);
+          // console.log(id);
+          value_array[num] = {
+            "product_id": curent_row.find("#product_id_" + id).val(),
+            "rate": curent_row.find("#rate").val(),
+            "quantity": curent_row.find("#qty").val(),
+          };
+          num++;
+        }
+      })
+      if(value_array.length===0)
+      {
+        alert("No product found");
+        return;
+      }
+      $('.submit1').attr('disabled', true);
+      console.log(value_array)
+      $.ajax({
+        type: 'POST',
+        url: host + $form.attr('action') +"/"+s_id,
+        headers: {"TOKEN" : token},
+        data: $form.serialize() + "&products=" + JSON.stringify(value_array),
+        dataType: 'json',
+        success: function(data) {
+          if (data != '' && data.status==200) {
+            localStorage.setItem('supply',JSON.stringify(data.data['supply']));
+            localStorage.setItem('inventory',JSON.stringify(data.data['inventory']));
+            localStorage.setItem('products',JSON.stringify(data.data['products']));
+            $('.submit1').attr('disabled', true);
+            alert('Supply updated successfully');
+          } else {
+            $('.submit1').attr('disabled', false);
+            alert('Data not updated');
+          }
+        },
+        error: function(error) {
+          alert('Error, data not updated');
+          //  alert(JSON.stringify(error));
+          $('.submit1').attr('disabled', false);
+        }
+      });
+    });
+    $(document).ready(function(){
+       //adding function
+       var count = 0;
       $('#add').click(function() {
         count = count + 1;
         var html_code = "<tr id='row_" + count + "'><td>";
@@ -164,77 +229,14 @@
         var num = Number.parseInt(delete_row.split('_')[1]);
         $('#' + delete_row).remove();
       });
-       //load sidebar
-       $("#sidehtml").load('sidebar.html',function(){
-        if(checkInternet())
-    {
-      initialiseNew();
-        document.querySelector('.internet').style.display ="none";
-    }
+  $("#sidehtml").load('sidebar.html',function(){
+    initialiseNew();
+if(checkInternet())
+{
+    document.querySelector('.internet').style.display ="none";
+}
   });
-    });
-    
-    $('#supply_form').submit(function(event) {
-      event.preventDefault();
-      if(!checkInternet())
-        {
-            alert("This operation requires internet connection");
-            return;
-        }
-      var $form = $(this);
-      var value_array = [];
-      var num = 0;
-      //fetch products
-      $("#products tr").each(function() {
-        var curent_row = $(this);
-        var id = curent_row.attr('id');
-        if (id != undefined) {
-          id = Number.parseInt(id.split('_')[1]);
-          // console.log(id);
-          value_array[num] = {
-            //   "m_stock_id": curent_row.find("#m_stock" + id).val(),
-            "product_id": curent_row.find("#product_id_" + id).val(),
-            "rate": curent_row.find("#rate").val(),
-            "quantity": curent_row.find("#qty").val(),
-          };
-          num++;
-        }
-      })
-      if(value_array.length===0)
-      {
-        alert("No product found");
-        return;
-      }
-      $('.submit1').attr('disabled', true);
-      $.ajax({
-        type: 'POST',
-        url: host + $form.attr('action'),
-        headers: {"TOKEN" : token},
-        data: $form.serialize() + "&products=" + JSON.stringify(value_array)+"&uuid="+uuidv4(),
-        dataType: 'json',
-        success: function(data) {
-          if (data != '' && data.status==200) {
-            localStorage.setItem('supply',JSON.stringify(data.data['supply']));
-            localStorage.setItem('inventory',JSON.stringify(data.data['inventory']));
-            localStorage.setItem('products',JSON.stringify(data.data['products']));
-            $('.submit1').attr('disabled', true);
-            $('.remove').attr('disabled', true);
-            $('.add').attr('disabled', true);
-            $(this).trigger("reset");
-            $('.submit1').attr('disabled', true);
-            alert('Supply saved successfully');
-          } else {
-            $('.submit1').attr('disabled', false);
-            alert('Data not saved');
-          }
-        },
-        error: function(error) {
-          alert('Error, data not saved');
-          $('.submit1').attr('disabled', false);
-          //  alert(JSON.stringify(error));
-        }
-      });
-    });
+});
 </script>
 </body>
 </html>

@@ -3,10 +3,17 @@ const token = localStorage.getItem("token");
 function requestdata(url,method,callback) {
     var r = new XMLHttpRequest();
       r.onload = function() {
+        if(r.status == 403)
+        {
+          alert("Authentication failed. Login again");
+          localStorage.setItem("token","");
+          location.href = "index.html";
+          return;
+        }
         if (r.readyState != 4 || r.status != 200) {
-            alert("Request failed. Try again");
-            localStorage.setItem("token","");
-            location.href = "index.html";
+            alert("Data request failed.");
+           // localStorage.setItem("token","");
+            //location.href = "index.html";
             return;
           };
           //console.log(JSON.parse(r.responseText));

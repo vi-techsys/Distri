@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Distri</title>
+      <title>Distri - Order</title>
       
       <!-- Favicon -->
       <link rel="shortcut icon" href="assets/images/favicon.ico" />
@@ -28,7 +28,31 @@
                 <div class="container-fluid">
                     <!-- row starts -->
                    <div id="row" class="row">
-
+                    <div class="col-lg-12">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+                            <div>
+                                <h4 class="mb-3">Order List</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="table-responsive rounded mb-3">
+                        <table class="data-table table mb-0 tbl-server-info">
+                            <thead class="bg-white text-uppercase">
+                                <tr class="ligth ligth-data">
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Desc.</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="ligth-body" id="catRow">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
                     </div>
                     <!-- row ends -->
                </div>
@@ -73,6 +97,7 @@
 <script src="assets/js/initialise.js"></script>
 <script src="assets/js/master.js"></script>
 <script>
+    loadtableorder()
     document.addEventListener("click",function(e){
        // if(e.target!=document.getElementById("sidenavbar"))
          //   {
@@ -85,13 +110,9 @@
     });
     $(document).ready(function(){
   $("#sidehtml").load('sidebar.html',function(){
-    initialiseNew();
     initialiseNewOrder(getSalesData);
 if(checkInternet())
 {
-        //calls
-        initiateKeys();
-         initiateData();
     document.querySelector('.internet').style.display ="none";
 }
   });

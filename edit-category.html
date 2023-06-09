@@ -2,30 +2,30 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <div class="header-title">
-                <h4 class="card-title">Add category</h4>
+                <h4 class="card-title">Edit category</h4>
             </div>
         </div>
         <div class="card-body">
-            <form method="POST" action="api/IV_categories/addnew" onsubmit="submitdata(this.id); return false;" id="category_form">
+            <form method="POST" action="api/IV_categories/edit" onsubmit="editdata(this); return false;" id="edit_ategory_form">
                 <div class="row">                                
                     <div class="col-12 col-sm-12 col-md-12">                      
                         <div class="form-group">
                             <label>Category Name *</label>
-                            <input type="text" name="category" class="form-control datainput" placeholder="Enter Category Name" required>
+                            <input type="hidden" id="category_id" class="edit_id">
+                            <input type="text" name="category" id="category" class="form-control edit_category datainput" placeholder="Enter Category Name" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>                                 
                     <div class="col-12 col-sm-12 col-md-12">
                         <div class="form-group">
                             <label for="parent">Parent *</label>
-                            <select name="parent" id="parent" class="datainput form-control" data-style="py-0" required>
+                            <select name="parent" id="parent" class="edit_parent datainput form-control" data-style="py-0" required>
                               
                             </select>
                         </div>
                     </div>                                
                 </div>                            
-                <button type="submit" class="btn btn-primary mr-2">Add category</button>
-                <button type="reset" class="btn btn-danger">Reset</button>
+                <button type="submit" class="btn btn-primary mr-2">Update Category</button>
             </form>
         </div>
     </div>

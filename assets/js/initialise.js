@@ -1,5 +1,5 @@
 //iniitialise storage
-document.write('<script type="text/javascript" src="assets/js/universal.js" ></script>');
+document.write('<script type="text/javascript" src="assets/js/universal.js"></script>');
 async function initiateKeys()
 {
     requestdata(host + 'api/users/dbkeys',"GET",updateKeys);
@@ -17,6 +17,12 @@ function updateKeys(data)
 async function initiateData()
 {
     requestdata(host + 'api/users/get_all_data',"POST",updateData);
+}
+
+async function getSalesData()
+{
+    requestdata(host + 'api/users/get_sales_data',"POST",updateData);
+    console.log('sales data');
 }
 
 function updateData(data)

@@ -2,23 +2,24 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <div class="header-title">
-                <h4 class="card-title">Add Product</h4>
+                <h4 class="card-title">Edit Product</h4>
             </div>
         </div>
         <div class="card-body">
-            <form method="POST" action="api/IV_products/addnew" onsubmit="submitdata(this.id); return false;" id="product_form">
+            <form method="POST" action="api/IV_products/edit" onsubmit="editdata(this); return false;" id="edit_product_form">
                 <div class="row">                                
                     <div class="col-12 col-sm-12 col-md-12">                      
                         <div class="form-group">
+                            <input type="hidden" id="product_id" class="edit_id">
                             <label>Product Name *</label>
-                            <input type="text" name="product_name" class="form-control datainput" placeholder="Enter Product Name" required>
+                            <input type="text" name="product_name" class="form-control edit_product_name datainput" placeholder="Enter Product Name" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>  
                     <div class="col-12 col-sm-12 col-md-12">
                         <div class="form-group">
                             <label for="parent">Category *</label>
-                            <select name="category_id" id="parent" class="datainput form-control" data-style="py-0" required>
+                            <select name="category_id" id="parent" class="datainput edit_category form-control" data-style="py-0" required>
                               
                             </select>
                         </div>
@@ -26,20 +27,19 @@
                     <div class="col-12 col-sm-12 col-md-12">                      
                         <div class="form-group">
                             <label>Cost Price. *</label>
-                            <input type="number" min="0" step="0.1" name="cost_price" class="form-control datainput" placeholder="Enter Cost Price" required>
+                            <input type="number" min="0" step="0.1" name="cost_price" class="edit_cost form-control datainput" placeholder="Enter Cost Price" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>                                 
                     <div class="col-12 col-sm-12 col-md-12">                      
                         <div class="form-group">
                             <label>Selling Price *</label>
-                            <input type="number" min="0" step="0.1" name="selling_price" class="form-control datainput" placeholder="Enter Selling Price" required>
+                            <input type="number" min="0" step="0.1" name="selling_price" class="edit_selling form-control datainput" placeholder="Enter Selling Price" required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>                                                                
                 </div>                            
-                <button type="submit" class="btn btn-primary mr-2">Add Product</button>
-                <button type="reset" class="btn btn-danger">Reset</button>
+                <button type="submit" class="btn btn-primary mr-2">Update Product</button>
             </form>
         </div>
     </div>
