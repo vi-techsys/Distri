@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Distri - Invoice</title>
+      <title>Distri - Sales</title>
       
       <!-- Favicon -->
       <link rel="shortcut icon" href="assets/images/favicon.ico" />
@@ -37,6 +37,7 @@
                                     <th>Quantity</th>
                                     <th>Unit Price</th>
                                     <th>Amount</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody class="ligth-body" id="catRow">
@@ -101,14 +102,12 @@
     });
     $(document).ready(function(){
   $("#sidehtml").load('sidebar.html',function(){
-    let params = new URLSearchParams(location.search);
-    const order_uuid = params.get('uuid');
-    loadorderinvoice(order_uuid)
 if(checkInternet())
 {
     document.querySelector('.internet').style.display ="none";
     initialiseNewOrder(getSalesData);
 }
+loadsales()
   });
 });
 </script>

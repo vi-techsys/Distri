@@ -530,7 +530,7 @@ function returnData(key)
       let rows='';
       console.log(salesorder)
       salesorder.forEach(sale=>{
-          rows = ` <tr>
+          rows += ` <tr>
           <td class="description">${sale.product_name}</td>
           <td class="quantity">${sale.quantity}</td>
           <td class="price">${sale.selling_price}</td>
@@ -539,10 +539,54 @@ function returnData(key)
       });
         rows +=` <tr>
         <td class="description">TOTAL:</td>
-        <td colspan="3" class="price"><div id="total" style="font-weight: bold;">${o_data.amount}</div></td>
+        <td colspan="3" class="price"><div id="total" style="font-weight: bold; text-align:right;">${o_data.amount}</div></td>
     </tr>`;
     document.getElementById("row").innerHTML =rows;
     document.getElementById('customer').innerText = o_data.firstname + " " + o_data.lastname;
-    document.getElementById('orderid').innerText = o_data.order_id;
+    document.getElementById('orderid').innerText = o_data.uuid;
+    document.getElementById('description').innerText = o_data.description;
     document.getElementById('date').innerText = o_data.created_at;
+    }
+
+    function loadsalesinvoice(obj)
+    {
+      console.log(obj)
+      obj.products.forEach(sale=>{
+          rows += ` <tr>
+          <td class="description">${sale.product_name}</td>
+          <td class="quantity">${sale.quantity}</td>
+          <td class="price">${sale.rate}</td>
+          <td class="total">${(sale.rate*sale.quantity)}</td>
+      </tr>`;
+      });
+        rows +=` <tr>
+        <td class="description">TOTAL:</td>
+        <td colspan="3" class="price"><div id="total" style="font-weight: bold; text-align:right;">${obj.amount}</div></td>
+    </tr>`;
+    document.getElementById("row").innerHTML =rows;
+    document.getElementById('customer').innerText = obj.customer;
+    document.getElementById('description').innerText = obj.description;
+    document.getElementById('orderid').innerText = obj.uuid;
+    document.getElementById('date').innerText = obj.date;
+    }
+
+    function loadsales(uuid)
+    {
+      const sdata =returnData("sales");
+      let rows='';
+      console.log(sdata)
+      sdata.forEach(sale=>{
+          rows += ` <tr>
+          <td class="description">${sale.product_name}</td>
+          <td class="quantity">${sale.quantity}</td>
+          <td class="price">${sale.selling_price}</td>
+          <td class="total">${(sale.selling_price*sale.quantity)}</td>
+          <td class="price">${sale.created_at}</td>
+      </tr>`;
+      });
+        //rows +=` <tr>
+        //<td class="description">TOTAL:</td>
+        //<td colspan="3" class="price"><div id="total" style="font-weight: bold; text-align:right;">${o_data.amount}</div></td>
+    //</tr>`;
+    document.getElementById("catRow").innerHTML =rows;
     }

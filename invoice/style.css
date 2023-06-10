@@ -9,25 +9,33 @@ tr,
 table {
     border-top: 1px solid black;
     border-collapse: collapse;
+    padding: 5px;
+    font-size: 15px;
 }
 
 td.description,
 th.description {
-    width: 75px;
-    max-width: 75px;
+    width: 300px;
+    max-width: 300px;
 }
 
+td.total,
+th.total {
+    width: 140px;
+    max-width: 140px;
+    word-break: break-all;
+}
 td.quantity,
 th.quantity {
-    width: 40px;
-    max-width: 40px;
+    width: 140px;
+    max-width: 140px;
     word-break: break-all;
 }
 
 td.price,
 th.price {
-    width: 40px;
-    max-width: 40px;
+    width: 140px;
+    max-width: 140px;
     word-break: break-all;
 }
 
@@ -37,8 +45,9 @@ th.price {
 }
 
 .ticket {
-    width: 155px;
-    max-width: 155px;
+    width: 500px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 img {

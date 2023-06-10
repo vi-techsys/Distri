@@ -32,7 +32,7 @@
             </table>
             <p class="centered">Thanks for your purchase!</p>
             <button id="btnPrint" class="hidden-print">Print</button>
-        <a href="view-order.html" class="hidden-print">Back to Orders</a>
+        <a href="add-order.html" class="hidden-print">Back to Orders</a>
         </div>
         <script src="invoice/script.js"></script>
         <script src="assets/js/backend-bundle.min.js"></script>
@@ -41,8 +41,9 @@
         <script>
               $(document).ready(function(){
     let params = new URLSearchParams(location.search);
-    const order_uuid = params.get('uuid');
-    loadorderinvoice(order_uuid)
+    const order_obj =params.get('obj');
+    let order = JSON.parse(order_obj);
+    loadsalesinvoice(order);
   });
         </script>
     </body>
