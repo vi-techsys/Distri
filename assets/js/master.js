@@ -93,7 +93,7 @@ function navigate(target, url,callback=null) {
               formel.reset();
               newdata =JSON.parse(localStorage.getItem("newdata"));
               //console.log(newdata);
-              alert("Data saved");
+              showNotification('Submit Data', 'Data saved successfully');
               return false;
   }
 
@@ -103,10 +103,12 @@ function navigate(target, url,callback=null) {
     const xhr = new XMLHttpRequest();
     xhr.onload = function() {
         if (xhr.readyState != 4 || xhr.status != 200) {
-            console.log(url + " Data submit failed. Try again");
+          showNotification('Data Upload', 'Data unable to upload');  
+          console.log(url + " Data submit failed. Try again");
             return;
           };
           callback(JSON.parse(xhr.responseText));
+          showNotification('Data Upload', 'Data uploaded successfully ');
           console.log(url + " Data saved");
       }
     xhr.open('POST', url);
@@ -139,16 +141,17 @@ function navigate(target, url,callback=null) {
   var timerID=0;
   var timerStart =false;
   //console.log(newdata)
-  //localStorage.setItem("newdata", JSON.stringify(new Array()));
          if(!newdata)
          {
             localStorage.setItem("newdata", JSON.stringify(new Array()));
          }
          else
          {
-          if(checkInternet() && timerStart===false)
-          {
             timerID = setInterval(() => {
+              console.log('checking new data');
+              newdata =JSON.parse(localStorage.getItem("newdata"));
+              if(checkInternet() && timerStart===false)
+              {
               try
               {
                 timerStart =true;
@@ -170,8 +173,15 @@ function navigate(target, url,callback=null) {
               timerStart =false;
             console.log(Exception);
             }
-            }, 30000);
           }
+          else
+          {
+            if(newdata.length>0)
+            {
+              showNotification("New Data Found", "Pls connect to the internet for new data to upload");
+            }
+          }
+            }, 30000);
          }
 }
 let neworders =JSON.parse(localStorage.getItem("neworders"));
@@ -187,12 +197,13 @@ async function initialiseNewOrder(callback)
          }
          else
          {
-          if(checkInternet() && timerStart1===false)
-          {
             timerID1 = setInterval(() => {
+              console.log('checking new order');
+              neworders =JSON.parse(localStorage.getItem("neworders"));
+              if(checkInternet() && timerStart1===false)
+            {
               try
               {
-                neworders =JSON.parse(localStorage.getItem("neworders"));
                 console.log('upload new order')
                 timerStart1 =true;
               const newOrder_ = neworders;
@@ -213,12 +224,14 @@ async function initialiseNewOrder(callback)
                     console.log("after order delete");
                     console.log(localStorage.getItem("neworders"));
                     console.log('orders uploaded');
+                    showNotification('Order Upload', 'New orders uploaded');  
                     } else {
                       console.log(data)
                     }
                   },
                   error: function(error) {
                     console.log(error);
+                    showNotification('Order Upload', 'New orders unable to upload');  
                   }
                 });    
               });
@@ -231,8 +244,16 @@ async function initialiseNewOrder(callback)
             finally{
               callback();
             }
-            }, 30000);
           }
+          else
+          {
+            if(neworders.length>0)
+            {
+              showNotification("New Data Found", "Pls connect to the internet for new data to upload");
+            }
+          }
+            }, 30000);
+        
          }
 }
 function returnData(key)
@@ -350,6 +371,18 @@ function returnData(key)
         p.innerHTML += options;
 
   }
+  function loadproductselect()
+  {
+        const data =returnData("products");
+        if(data==null) {
+          return;
+        }
+        let  c_names ='<option value=""></option>';
+        data.forEach(function(el){
+         c_names += '<option value ="' + el.product_id + '">'+el.product_name+'</option>';
+        });
+        document.getElementById("products").innerHTML = c_names;
+  }
   function loadproducts()
   {
         const data =returnData("products");
@@ -433,7 +466,7 @@ function returnData(key)
         const parent_ = document.getElementById("catRow");
         let rows ='';
         data.forEach(el=>{
-            rows += '<tr><td>'+el.product_name  + '</td><td>' + el.description+'</td><td>' + el.SumQ + '</td><td>' + el.selling_price + '</td><td>' + el.quantity_supplied +'</td></tr>';
+            rows += '<tr><td>'+el.product_name  + '</td><td>' + el.description+'</td><td>' + el.selling_price + '</td><td>' + el.quantity_supplied +'</td><td>' + (el.quantity_supplied * el.selling_price) +'</td><td>' + el.created_at +'</td></tr>';
         });
         parent_.innerHTML = rows;
   }
@@ -511,7 +544,7 @@ function returnData(key)
         const parent_ = document.getElementById("catRow");
         let rows ='';
         data.forEach(ord=>{
-            rows += `<tr><td>${ord.firstname} ${ord.lastname}</td><td>${ord.created_at}</td><td>${ord.amount}</td><td>${ord.description}</td>`;
+            rows += `<tr><td>${ord.order_id}</td><td>${ord.firstname} ${ord.lastname}</td><td>${ord.created_at}</td><td>${ord.amount}</td><td>${ord.description}</td>`;
             rows += '<td><div class="d-flex align-items-center list-action">';
             rows += '<a class="badge bg-danger mr-2" data-toggle="tooltip" data-placement="top" title="View Order" data-original-title="Order"';
              rows +=   'href="view-order-sales.html?uuid='+ord.uuid+'"><i class="ri-book-line mr-0"></i></a>'; 
@@ -550,7 +583,7 @@ function returnData(key)
 
     function loadsalesinvoice(obj)
     {
-      console.log(obj)
+      let rows ='';
       obj.products.forEach(sale=>{
           rows += ` <tr>
           <td class="description">${sale.product_name}</td>
@@ -574,7 +607,6 @@ function returnData(key)
     {
       const sdata =returnData("sales");
       let rows='';
-      console.log(sdata)
       sdata.forEach(sale=>{
           rows += ` <tr>
           <td class="description">${sale.product_name}</td>
@@ -590,3 +622,63 @@ function returnData(key)
     //</tr>`;
     document.getElementById("catRow").innerHTML =rows;
     }
+
+    function loadmyaccountstatement()
+    {
+          const data =returnData("myaccount");
+          if(data)
+          {
+            let balance =0;
+            let totalDebit = 0;
+            let totalCredit =0;
+          const parent_ = document.getElementById("catRow");
+          let rows ='';
+          data.forEach(acc=>{
+            let debit = 0;
+            let credit =0;
+              if(acc.type === 'C')
+              {
+                credit = Number.parseFloat(acc.amount);
+                balance +=credit;
+                totalCredit +=credit;
+              }
+              else if(acc.type==='D')
+              {
+                debit = Number.parseFloat(acc.amount);
+                balance -= debit;
+                totalDebit +=debit;
+              }
+              rows += `<tr><td>${acc.description}</td><td>${credit}</td><td>${debit}</td><td>${balance}</td><td>${acc.created_at}</td></tr>`;
+          });
+          rows +=`<tfoot><tr style="background-color:red;font-weight:bold;"><td style="color:white;">Total: </td><td style="color:white;">${totalCredit}</td><td style="color:white;">${totalDebit}</td><td style="color:white;">${balance}</td><td></td></tr></tfoot>`;
+          parent_.innerHTML = rows;
+          }
+    }
+
+    function loadtablemyaccount()
+    {
+      const data =returnData("myaccount");
+          const parent_ = document.getElementById("catRow");
+          let rows ='';
+          data.forEach(acc=>{
+              rows += `<tr><td>${acc.description}</td><td>${acc.amount}</td><td>${acc.type}</td><td>${acc.created_at}</td>`;
+              rows += '<td><div class="d-flex align-items-center list-action">';
+              rows += `<a onclick ="navigateEdit('row','edit-my-account.html',loadmyaccountedit,${acc.myaccount_id});" class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"`;
+               rows +=   'href="#"><i class="ri-pencil-line mr-0"></i></a>';
+               rows +=    '</div></td></tr>';
+          });
+          parent_.innerHTML = rows;
+      }
+  
+      function loadmyaccountedit(id)
+  {
+        const data =returnData("myaccount");
+        const myaccount = data.find((myaccount)=>myaccount.myaccount_id==id);
+        document.getElementsByClassName("edit_description")[0].value = myaccount.description;
+        document.getElementsByClassName("edit_amount")[0].value = myaccount.amount;
+        document.getElementsByClassName("edit_id")[0].value= myaccount.myaccount_id;
+        document.getElementsByClassName("edit_type")[0].value = myaccount.type;
+        document.getElementsByClassName("edit_created_at")[0].value = myaccount.created_at;
+  }
+  
+    //localStorage.setItem("newdata", JSON.stringify(new Array()));

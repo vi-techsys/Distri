@@ -27,7 +27,23 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <!-- row starts -->
+                    <button class="btn btn-sm btn-success" onclick="printDiv('row')">Print</button>
                    <div id="row" class="row">
+                    <div class="col-lg-12">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+                            <div>
+                                <h4 class="mb-3">Sales List</h4>
+                            </div>
+                            <div><form><label for="fromorder">Date <input type="date" id="fromorder"></label>
+                            <button type="button" id="searchorderbutton">Search</button>
+                            </form></div>
+                            <div><form><label for="products">Product <select id="products">
+                                <option value="">Select product</option>
+                            </select></label>
+                                <button type="button" id="searchproductbutton">Search</button>
+                                </form></div>
+                        </div>
+                    </div>
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="table-responsive rounded mb-3">
                         <table class="data-table table mb-0 tbl-server-info">
@@ -105,11 +121,71 @@
 if(checkInternet())
 {
     document.querySelector('.internet').style.display ="none";
-    initialiseNewOrder(getSalesData);
 }
-loadsales()
+initialiseNewOrder(getSalesData);
+//loadsales()
+loadproductselect()
   });
 });
+const searcButton = document.getElementById("searchorderbutton");
+searcButton.addEventListener("click",function()
+{
+    
+    const fromOrder= document.getElementById("fromorder").value;
+    //const toOrder= document.getElementById("toorder").value+ " 00:00:00";
+    const sales =returnData("sales");
+    const sdata = searchDate(sales,fromOrder);
+    let saleTotal =0;
+    let totalQ=0;
+        const parent_ = document.getElementById("catRow");
+        let rows ='';
+        sdata.forEach(sale=>{
+        saleTotal += Number.parseFloat(sale.selling_price*sale.quantity);
+        totalQ += Number.parseInt(sale.quantity);
+          rows += ` <tr>
+          <td class="description">${sale.product_name}</td>
+          <td class="quantity">${sale.quantity}</td>
+          <td class="price">${sale.selling_price}</td>
+          <td class="total">${(sale.selling_price*sale.quantity)}</td>
+          <td class="price">${sale.created_at}</td>
+      </tr>`;
+      });
+        rows +=` <tr>
+        <td class="description">TOTAL:</td><td>${totalQ}</td>
+        <td colspan="2" class="price"><div id="total" style="font-weight: bold; text-align:right;">${saleTotal}</div></td><td></td>
+    </tr>`;
+    document.getElementById("catRow").innerHTML =rows;
+});
+const searchPButton = document.getElementById("searchproductbutton");
+searchPButton.addEventListener("click",function()
+{
+    
+    const product_id= document.getElementById("products").value;
+    //const toOrder= document.getElementById("toorder").value+ " 00:00:00";
+    const sales =returnData("sales");
+    const sdata = searchProduct(sales,product_id);
+    let saleTotal =0;
+    let totalQ=0;
+        const parent_ = document.getElementById("catRow");
+        let rows ='';
+      sdata.forEach(sale=>{
+        saleTotal += Number.parseFloat(sale.selling_price*sale.quantity);
+        totalQ += Number.parseInt(sale.quantity);
+          rows += ` <tr>
+          <td class="description">${sale.product_name}</td>
+          <td class="quantity">${sale.quantity}</td>
+          <td class="price">${sale.selling_price}</td>
+          <td class="total">${(sale.selling_price*sale.quantity)}</td>
+          <td class="price">${sale.created_at}</td>
+      </tr>`;
+      });
+        rows +=` <tr>
+        <td class="description">TOTAL:</td><td>${totalQ}</td>
+        <td colspan="2" class="price"><div id="total" style="font-weight: bold; text-align:right;">${saleTotal}</div></td>
+    </tr>`;
+    document.getElementById("catRow").innerHTML =rows;
+});
+</script>
 </script>
 </body>
 </html>

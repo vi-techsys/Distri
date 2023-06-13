@@ -59,3 +59,58 @@ function requestdata(url,method,callback) {
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
       );
     }
+
+    function searchDate(objArr, value)
+    {
+      const results =new Array();
+        for(let x in objArr)
+        {
+          if(objArr[x].created_at.includes(value))
+          {
+              results.push(objArr[x]);
+          }
+        }
+        return results;
+    }
+
+    function searchProduct(objArr, value)
+    {
+      const results =new Array();
+        for(let x in objArr)
+        {
+          if(objArr[x].product_id === value)
+          {
+              results.push(objArr[x]);
+          }
+        }
+        return results;
+    }
+
+    function printDiv(divID) {
+      //Get the HTML of div
+      var divElements = document.getElementById(divID).innerHTML;
+      //Get the HTML of whole page
+      const wrapper = document.getElementsByClassName("wrapper")[0];
+      var oldPage = wrapper.innerHTML;
+  
+      //Reset the page's HTML with div's HTML only
+      wrapper.innerHTML = divElements;
+  
+      //Print Page
+      window.print();
+  
+      //Restore orignal HTML
+      wrapper.innerHTML= oldPage;         
+  }
+
+  function showNotification(title,body) {
+    //if(document.visibilityState === "visible") {
+      //  return;
+    //   }
+    var notification = new Notification(title, { body });
+    notification.onclick = () => {
+         notification.close();
+         window.parent.focus();
+    }
+ }
+ 

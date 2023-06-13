@@ -57,6 +57,7 @@ function login(login)
             const rep = JSON.parse(xhr.responseText);
           if(rep.status==200)
           {
+                localStorage.setItem("userdata", JSON.stringify(rep.userdata));
                 localStorage.setItem("token",rep.data.token);
                 location.href = "dashboard.html";
           }

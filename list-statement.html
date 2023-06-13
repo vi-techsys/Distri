@@ -26,18 +26,14 @@
         </div>
             <div class="content-page">
                 <div class="container-fluid">
-                    <!-- row starts -->
                     <button class="btn btn-sm btn-success" onclick="printDiv('row')">Print</button>
+                    <!-- row starts -->
                    <div id="row" class="row">
-
-<div class="col-lg-12">
+    <div class="col-lg-12">
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
         <div>
-            <h4 class="mb-3">Customer Account</h4>
+            <h4 class="mb-3">My Account Statement</h4>
         </div>
-        <div><form><label for="fromorder">Date <input type="date" id="fromorder"></label>
-            <button type="button" id="searchorderbutton">Search</button>
-            </form></div>
     </div>
 </div>
 <div class="col-12 col-md-12 col-lg-12">
@@ -45,18 +41,18 @@
     <table class="data-table table mb-0 tbl-server-info">
         <thead class="bg-white text-uppercase">
             <tr class="ligth ligth-data">
-                <th>Name</th>
-                <th>Transaction No.</th>
+                <th>Transactin No.</th>
+                <th>Credit</th>
+                <th>Debit</th>
+                <th>Balance</th>
                 <th>Date</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Action</th>
             </tr>
         </thead>
         <tbody class="ligth-body" id="catRow">
             
         </tbody>
     </table>
+</div>
 </div>
 </div>
 </div>
@@ -103,34 +99,16 @@
 <script src="assets/js/initialise.js"></script>
 <script src="assets/js/master.js"></script>
 <script>
-    loadtablecustomeraccount();
+    loadmyaccountstatement();
     $(document).ready(function(){
   $("#sidehtml").load('sidebar.html',function(){
-    if(checkInternet())
+    initialiseNew();
+if(checkInternet())
 {
-    //initialiseNew();
     document.querySelector('.internet').style.display ="none";
 }
-  });
-});
-const searcButton = document.getElementById("searchorderbutton");
-searcButton.addEventListener("click",function()
-{
-    
-    const fromOrder= document.getElementById("fromorder").value;
-    //const toOrder= document.getElementById("toorder").value+ " 00:00:00";
-    const accounts =returnData("account");
-    const data = searchDate(accounts,fromOrder);
-        const parent_ = document.getElementById("catRow");
-        let rows ='';
-        data.forEach(acc=>{
-            rows += `<tr><td>${acc.firstname} ${acc.lastname}</td><td>${acc.transaction_no}</td><td>${acc.created_at}</td><td>${acc.amount}</td><td>${acc.type}</td>`;
-            rows += '<td><div class="d-flex align-items-center list-action">';
-            rows += `<a onclick ="navigateEdit('row','edit-customer-payment.html',loadaccountedit,${acc.account_id});" class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"`;
-             rows +=   'href="#"><i class="ri-pencil-line mr-0"></i></a>';
-             rows +=    '</div></td></tr>';
-        });
-        parent_.innerHTML = rows;
+initialiseNewOrder(getSalesData);
+  }); 
 });
 </script>
 </body>

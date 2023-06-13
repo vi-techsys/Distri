@@ -1,4 +1,4 @@
-<div id="sidenavbar" class="iq-sidebar  sidebar-default ">
+<div id="sidenavbar" class="iq-sidebar  sidebar-default" style="overflow-y: auto;">
     <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
         <a href="dashboard.html" class="header-logo">
             <img src="assets/images/logo.png" class="img-fluid rounded-normal light-logo" alt="logo"><h5 class="logo-title light-logo ml-3">DistriApp</h5>
@@ -97,8 +97,8 @@
                             </a>
                         </li>
                         <li class="">
-                            <a href="#">
-                                <i class="las la-minus"></i><span onclick="navigate('row',`list-inventory.html?tt=${new Date()}`,loadtableinventory);">Inventory</span>
+                            <a href="list-inventory.html">
+                                <i class="las la-minus"></i><span>Inventory</span>
                             </a>
                         </li>
                     </ul>
@@ -166,17 +166,17 @@
                     </a>
                     <ul id="myaccount" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                         <li class="">
-                            <a href="add-account.html">
-                                <i class="las la-minus"></i><span>Add Payment/Bill</span>
+                            <a href="#">
+                                <i class="las la-minus"></i><span onclick="navigate('row',`add-payment.html?tt=${new Date()}`,null);">Add Payment/Bill</span>
                             </a>
                         </li>
                         <li class="">
-                            <a href="list-myaccount.html">
+                            <a href="list-my-account.html">
                                 <i class="las la-minus"></i><span>View Account</span>
                             </a>
                         </li>
                         <li class="">
-                            <a href="list-sale.html">
+                            <a href="list-statement.html">
                                 <i class="las la-minus"></i><span>Account Statement</span>
                             </a>
                         </li>
@@ -184,17 +184,7 @@
                 </li>
             </ul>
         </nav>
-        <div id="sidebar-bottom" class="position-relative sidebar-bottom">
-            <div class="card border-none">
-                <div class="card-body p-0">
-                    <div class="sidebarbottom-content">
-                        <div class="image"><img src="assets/images/layouts/side-bkg.png" class="img-fluid" alt="side-bkg"></div>
-                        <h6 class="mt-4 px-4 body-title">Get More Feature by Upgrading</h6>
-                        <button type="button" class="btn sidebar-bottom-btn mt-4">Go Premium</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
         <div class="p-3"></div>
     </div>
     </div>
@@ -220,29 +210,23 @@
                         <ul class="navbar-nav ml-auto navbar-list align-items-center">
                            
                             <li>
-                                <a href="#" class="btn border add-btn shadow-none mx-2 d-none d-md-block"
-                                    data-toggle="modal" data-target="#new-order"><i class="las la-plus mr-2"></i>New
-                                    Order</a>
+                                <a href="add-order.html" class="btn border add-btn shadow-none mx-2 d-none d-md-block"><i class="las la-plus mr-2"></i>New Order</a>
                             </li>
                             <li class="nav-item nav-icon dropdown caption-content">
                                 <a href="#" class="search-toggle dropdown-toggle" id="dropdownMenuButton4"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="../assets/images/user/1.png" class="img-fluid rounded" alt="user">
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile
                                 </a>
                                 <div class="iq-sub-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <div class="card shadow-none m-0">
                                         <div class="card-body p-0 text-center">
                                             <div class="media-body profile-detail text-center">
-                                                <img src="../assets/images/page-img/profile-bg.jpg" alt="profile-bg"
-                                                    class="rounded-top img-fluid mb-4">
-                                                <img src="../assets/images/user/1.png" alt="profile-img"
-                                                    class="rounded profile-img img-fluid avatar-70">
+                                                <img src="assets/images/page-img/profile-bg.jpg" alt="profile-bg"
+                                                    class="rounded-top img-fluid mb-3">
                                             </div>
                                             <div class="p-3">
-                                                <h5 class="mb-1">JoanDuo@property.com</h5>
-                                                <p class="mb-0">Since 10 march, 2020</p>
+                                                <h5 class="mb-1" id="useremail"></h5>
                                                 <div class="d-flex align-items-center justify-content-center mt-3">
-                                                    <a href="../app/user-profile.html" class="btn border mr-2">Profile</a>
+                                                    <a href="user-password.html" class="btn border mr-2">Change Password</a>
                                                     <a href="#" onclick="logout()" class="btn border">Sign Out</a>
                                                 </div>
                                             </div>

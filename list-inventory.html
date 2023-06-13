@@ -1,8 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Distri - Order</title>
+      
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="assets/images/favicon.ico" />
+      <link rel="stylesheet" href="assets/css/backend-plugin.min.css">
+      <link rel="stylesheet" href="assets/css/backend.css?v=1.0.0">
+      <link rel="stylesheet" href="assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+      <link rel="stylesheet" href="assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
+      <link rel="stylesheet" href="assets/vendor/remixicon/fonts/remixicon.css">  </head>
+  <body class="  ">
+    <!-- loader Start -->
+    <div id="loading">
+          <div id="loading-center">
+          </div>
+    </div>
+    <!-- loader END -->
+    <!-- Wrapper Start -->
+    <div class="wrapper">
+        <div id="sidehtml">
+
+        </div>
+            <div class="content-page">
+                <div class="container-fluid">
+                    <!-- row starts -->
+                    <button class="btn btn-sm btn-success" onclick="printDiv('row')">Print</button>
+                   <div id="row" class="row">
 <div class="col-lg-12">
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
         <div>
             <h4 class="mb-3">Inventory List</h4>
         </div>
+        <div><form><label for="fromorder">Date <input type="date" id="fromorder"></label>
+            <button type="button" id="searchorderbutton">Search</button>
+            </form></div>
     </div>
 </div>
 <div class="col-12 col-md-12 col-lg-12">
@@ -12,9 +46,10 @@
             <tr class="ligth ligth-data">
                 <th>Product</th>
                 <th>Desc.</th>
-                <th>Quantity</th>
                 <th>Unit Price</th>
                 <th>Q. Supplied</th>
+                <th>Amount</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody class="ligth-body" id="catRow">
@@ -23,3 +58,74 @@
     </table>
 </div>
 </div>
+<!-- Wrapper End-->
+<footer class="iq-footer">
+    <div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item"><a href="backend/privacy-policy.html">Privacy Policy</a></li>
+                        <li class="list-inline-item"><a href="backend/terms-of-service.html">Terms of Use</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <span class="mr-1"><script>document.write(new Date().getFullYear())</script>©</span> <a href="#" class="">POS Dash</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</footer>
+<!-- Backend Bundle JavaScript -->
+<script src="assets/js/backend-bundle.min.js"></script>
+    
+<!-- Table Treeview JavaScript -->
+<script src="assets/js/table-treeview.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script src="assets/js/customizer.js"></script>
+
+<!-- Chart Custom JavaScript -->
+<script async src="assets/js/chart-custom.js"></script>
+
+<!-- app JavaScript -->
+<script src="assets/js/app.js"></script>
+<!-- Master JavaScript -->
+<script src="assets/js/initialise.js"></script>
+<script src="assets/js/master.js"></script>
+<script>
+      $(document).ready(function(){
+  $("#sidehtml").load('sidebar.html',function(){
+if(checkInternet())
+{
+    document.querySelector('.internet').style.display ="none";
+}
+initialiseNewOrder(getSalesData);
+  });
+});
+    loadtableinventory()
+    const searcButton = document.getElementById("searchorderbutton");
+searcButton.addEventListener("click",function()
+{
+    
+    const fromOrder= document.getElementById("fromorder").value;
+    //const toOrder= document.getElementById("toorder").value+ " 00:00:00";
+    const inventory =returnData("inventory");
+    const data = searchDate(inventory,fromOrder);
+    let qTotal =0;
+    let totalAmt =0;
+        const parent_ = document.getElementById("catRow");
+        let rows ='';
+        data.forEach(el=>{
+            qTotal += Number.parseInt(el.quantity_supplied);
+            totalAmt += Number.parseInt(el.selling_price * el.quantity_supplied);
+            rows += '<tr><td>'+el.product_name  + '</td><td>' + el.description+'</td><td>' + el.selling_price + '</td><td>' + el.quantity_supplied +'</td><td>' + (el.quantity_supplied * el.selling_price) +'</td><td>' + el.created_at +'</td></tr>';
+        });
+        rows += `<tr style="font-weight:bold;"><td colspan="3">Total</td><td>${qTotal}</td><td>${totalAmt}</td></tr>`;
+        parent_.innerHTML = rows;
+});
+</script>
+</body>
+</html>

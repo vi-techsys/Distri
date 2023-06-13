@@ -27,6 +27,7 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <!-- row starts -->
+                    <button class="btn btn-sm btn-success" onclick="printDiv('row')">Print</button>
                    <div id="row" class="row">
     <div class="col-lg-12">
     <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
@@ -107,8 +108,8 @@
 if(checkInternet())
 {
     document.querySelector('.internet').style.display ="none";
-    initialiseNewOrder(getSalesData);
 }
+initialiseNewOrder(getSalesData);
   }); 
 });
 </script>

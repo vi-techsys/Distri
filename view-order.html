@@ -27,12 +27,16 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <!-- row starts -->
+                    <button class="btn btn-sm btn-success" onclick="printDiv('row')">Print</button>
                    <div id="row" class="row">
                     <div class="col-lg-12">
                         <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
                             <div>
                                 <h4 class="mb-3">Order List</h4>
                             </div>
+                            <div><form><label for="fromorder">Date <input type="date" id="fromorder"></label>
+                            <button type="button" id="searchorderbutton">Search</button>
+                            </form></div>
                         </div>
                     </div>
                     <div class="col-12 col-md-12 col-lg-12">
@@ -40,6 +44,7 @@
                         <table class="data-table table mb-0 tbl-server-info">
                             <thead class="bg-white text-uppercase">
                                 <tr class="ligth ligth-data">
+                                    <th>Order ID</th>
                                     <th>Customer</th>
                                     <th>Date</th>
                                     <th>Amount</th>
@@ -110,13 +115,37 @@
     });
     $(document).ready(function(){
   $("#sidehtml").load('sidebar.html',function(){
-    initialiseNewOrder(getSalesData);
 if(checkInternet())
 {
     document.querySelector('.internet').style.display ="none";
-    initialiseNewOrder(getSalesData);
 }
+initialiseNew();
+initialiseNewOrder(getSalesData);
   });
+});
+const searcButton = document.getElementById("searchorderbutton");
+searcButton.addEventListener("click",function()
+{
+    
+    const fromOrder= document.getElementById("fromorder").value;
+    //const toOrder= document.getElementById("toorder").value+ " 00:00:00";
+    const orders =returnData("orders");
+    const data = searchDate(orders,fromOrder);
+    let orderTotal =0;
+        const parent_ = document.getElementById("catRow");
+        let rows ='';
+        data.forEach(ord=>{
+            orderTotal +=Number.parseFloat(ord.amount);
+            rows += `<tr><td>${ord.order_id}</td><td>${ord.firstname} ${ord.lastname}</td><td>${ord.created_at}</td><td>${ord.amount}</td><td>${ord.description}</td>`;
+            rows += '<td><div class="d-flex align-items-center list-action">';
+            rows += '<a class="badge bg-danger mr-2" data-toggle="tooltip" data-placement="top" title="View Order" data-original-title="Order"';
+             rows +=   'href="view-order-sales.html?uuid='+ord.uuid+'"><i class="ri-book-line mr-0"></i></a>'; 
+            rows += `<a onclick ="navigateEdit('row','edit-order-sales.html',loadorderedit,${ord.uuid});" class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"`;
+             rows +=   'href="#"><i class="ri-pencil-line mr-0"></i></a>';
+             rows +=    '</div></td></tr>';
+        });
+        rows += `<tr style ="font-weight:bold;"><td>Total:</td><td colspan="5">${orderTotal}</td></tr>`;
+        parent_.innerHTML = rows;
 });
 </script>
 </body>

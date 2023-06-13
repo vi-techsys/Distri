@@ -27,6 +27,7 @@
             <div class="content-page">
                 <div class="container-fluid">
                     <!-- row starts -->
+                    <button class="btn btn-sm btn-success" onclick="printDiv('row')">Print</button>
                    <div id="row" class="row">
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="table-responsive rounded mb-3">
@@ -107,8 +108,9 @@
 if(checkInternet())
 {
     document.querySelector('.internet').style.display ="none";
-    initialiseNewOrder(getSalesData);
 }
+initialiseNew();
+initialiseNewOrder(getSalesData);
   });
 });
 </script>

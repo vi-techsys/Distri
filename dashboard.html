@@ -73,20 +73,22 @@
 <script src="assets/js/initialise.js"></script>
 <script src="assets/js/master.js"></script>
 <script>
-    document.addEventListener("click",function(e){
-       // if(e.target!=document.getElementById("sidenavbar"))
-         //   {
-               /* const body =document.querySelector('body');
+    /*const body =document.querySelector('body');
+    body.addEventListener("click",function(e){
+        if(e.target!= document.getElementById("sidenavbar"))
+        {
                 if(body.classList.contains('sidebar-main'))
                 {
                     body.classList.remove('sidebar-main');
-                }*/
-           // }
-    });
+                }
+            }
+    });*/
     initialiseNew();
     initialiseNewOrder(getSalesData);
     $(document).ready(function(){
   $("#sidehtml").load('sidebar.html',function(){
+    const user = returnData('userdata');
+    document.getElementById("useremail").innerText = user.email;
 if(checkInternet())
 {
         //calls
@@ -94,6 +96,9 @@ if(checkInternet())
          initiateData();
     document.querySelector('.internet').style.display ="none";
 }
+Notification.requestPermission().then(function (permission) {
+console.log(permission);
+});
   });
 });
 </script>
